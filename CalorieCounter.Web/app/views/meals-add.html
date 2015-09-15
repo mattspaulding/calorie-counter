@@ -1,0 +1,38 @@
+﻿<div layout="row">
+    <div flex flex-gt-sm="50" offset-gt-sm="25">
+        <form name="form">
+            <h2>Add Meal</h2>
+            <md-input-container flex>
+                <label>Name</label>
+                <input required name="name" ng-maxlength="100" ng-model="meal.name">
+                <div ng-messages="form.name.$error">
+                    <div ng-message="required">required</div>
+                    <div ng-message="maxlength">too long</div>
+                </div>
+            </md-input-container>
+            <md-input-container flex>
+                <label>Number of calories</label>
+                <input required name="numberOfCalories" type="number" ng-model="meal.numberOfCalories">
+                <div ng-messages="form.numberOfCalories.$error">
+                    <div ng-message="required">required</div>
+                </div>
+            </md-input-container>
+            <md-input-container flex>
+                <label>Date and time eaten</label>
+                <input required disabled name="dateTime" ng-model="meal.dateTime">
+                <div ng-messages="form.dateTime.$error">
+                    <div ng-message="required">required</div>
+                </div>
+            </md-input-container>
+            <md-input-container flex>
+                <datetimepicker data-ng-model="meal.dateTime" />
+            </md-input-container>
+            <div layout="row" layout-align="end">
+                <md-button type="submit" data-ng-click="createMeal()">Submit</md-button>
+            </div>
+            <div ng-hide="message == ''" ng-class="(savedSuccessfully) ? 'alert alert-success' : 'alert alert-danger'">
+                {{message}}
+            </div>
+        </form>
+    </div>
+</div>

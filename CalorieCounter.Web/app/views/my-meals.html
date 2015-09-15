@@ -1,0 +1,108 @@
+﻿<div ng-init="getMyMeals()">
+    <div>
+        <md-tabs md-dynamic-height md-border-bottom>
+            <md-tab label="Calorie Limit">
+                <md-content class="md-padding">
+                    <md-input-container flex>
+                        <label>Calorie Limit</label>
+                        <input ng-model="data.calorieLimit" type="number" />
+                    </md-input-container>
+                </md-content>
+            </md-tab>
+            <md-tab label="Filter Date">
+                <md-content class="md-padding">
+                    <div flex layout="row">
+                        <div flex layout="column">
+                            <md-input-container flex>
+                                <label>Start Date</label>
+                                <input required disabled name="startDate" ng-model="mealFilter.startDate">
+                            </md-input-container>
+                            <md-input-container flex>
+                                <datetimepicker datetimepicker-config="{ startView:'month', minView:'day' }" data-ng-model="mealFilter.startDate" />
+                            </md-input-container>
+                        </div>
+                        <div flex layout="column">
+                            <md-input-container flex>
+                                <label>End Date</label>
+                                <input required disabled name="endDate" ng-model="mealFilter.endDate">
+                            </md-input-container>
+                            <md-input-container flex>
+                                <datetimepicker datetimepicker-config="{ startView:'month', minView:'day' }" data-ng-model="mealFilter.endDate" />
+                            </md-input-container>
+                        </div>
+                    </div>
+
+                    <div flex layout="row">
+                        <div flex layout="column">
+                            <md-input-container flex>
+                                <label>Start Hour</label>
+                                <input required name="startHour" ng-maxlength="24" type="number" ng-model="mealFilter.startHour">
+                            </md-input-container>
+                        </div>
+                        <div flex layout="column">
+                            <md-input-container flex>
+                                <label>End Hour</label>
+                                <input required name="endHour" ng-maxlength="24" type="number" ng-model="mealFilter.endHour">
+                            </md-input-container>
+                        </div>
+                    </div>
+                    <div layout="row" layout-align="end">
+                        <md-button ng-click="data.getFilteredMeals()">Apply Filters</md-button>
+                    </div>
+                </md-content>
+            </md-tab>
+        </md-tabs>
+        <div layout="row" layout-sm="column" layout-align="center center" ng-show="data.loading">
+            <md-progress-linear md-mode="indeterminate"></md-progress-linear>
+        </div>
+        <div layout="row" layout-align="end">
+            <md-button class="md-raised" ng-click="go('/meals-add')">Add A Meal</md-button>
+        </div>
+        <md-list flex>
+            <md-subheader class="md-no-sticky">My Meals</md-subheader>
+            <md-list-item flex class="md-whiteframe-z1" style="padding:10px;margin:10px;background-color:lightblue" ng-repeat="year in meals|reverse">
+                <h5 class="md-no-sticky">{{year[0][0][0][0].year}}</h5>
+                <md-list flex>
+                    <md-list-item flex class="md-whiteframe-z2" style="padding:10px;margin:10px;background-color:lightcyan" ng-repeat="month in year|reverse">
+                        <h5 class="md-no-sticky">{{month[0][0][0].monthNameShort}}</h5>
+                        <md-list flex>
+                            <md-list-item flex class="md-whiteframe-z3" style="padding:10px;margin:10px;background-color:white" ng-repeat="day in month|reverse">
+                                <h5 class="md-no-sticky">{{day[0][0].day}}</h5>
+                                <h5 class="md-no-sticky"> | </h5>
+                                <h5 class="md-no-sticky">{{day[0][0].dayNameShort}}</h5>
+                                <md-list flex>
+                                    <md-list-item flexstyle="padding:10px;margin:10px;background-color:white" ng-repeat="meals in day|reverse">
+                                        <md-list flex>
+                                            <md-list-item flex style="padding:10px;margin:10px;background-color:white" ng-repeat="meal in meals|reverse">
+                                                <div flex layout="row">
+                                                    <div flex="10"><h4></h4></div>
+                                                    <div flex="15"><h4>{{ meal.time }}</h4></div>
+                                                    <div flex><h4>{{ meal.name }}</h4></div>
+                                                    <div flex="15"><h4>{{ meal.numberOfCalories }} cal</h4></div>
+                                                    <div flex="15">
+                                                        <md-fab-speed-dial md-direction="left"
+                                                                           ng-class="md-scale">
+                                                            <md-fab-actions>
+                                                                <md-button aria-label="Delete" class="md-icon-button">
+                                                                    <ng-md-icon icon="delete" style="fill:#23B9A3;" ng-click="deleteMeal(meal.mealId)"></ng-md-icon>
+                                                                </md-button>
+                                                                <md-button aria-label="Edit" class="md-icon-button">
+                                                                    <ng-md-icon icon="edit" style="fill:#23B9A3;" ng-click="go('/meals-edit/'+meal.mealId)"></ng-md-icon>
+                                                                </md-button>
+                                                            </md-fab-actions>
+                                                        </md-fab-speed-dial>
+                                                    </div>
+                                                </div>
+                                            </md-list-item>
+                                        </md-list>
+                                        <md-button class=" md-fab" style="background-color:{{setColorByCalorieLimit(meals)}};">{{calculateDailyCalories(meals)}}</md-button>
+                                    </md-list-item>
+                                </md-list>
+                            </md-list-item>
+                        </md-list>
+                    </md-list-item>
+                </md-list>
+            </md-list-item>
+        </md-list>
+    </div>
+</div>
